@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигационная панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #007bff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .input-container {
+            width: 80%;
+            margin: 20px auto; /* Центрируем контейнер */
+            display: flex; /* Выравниваем поля в одну строку */
+            justify-content: space-between; /* Распределяем пространство между полями */
+            align-items: center; /* Выравниваем по вертикали */
+        }
+        input[type="text"] {
+            flex: 1; /* Поля занимают равное пространство */
+            margin-right: 10px; /* Отступ справа между полями */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="text"]:last-child {
+            margin-right: 0; /* Убираем отступ у последнего поля */
+        }
+        button.filter-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button.filter-button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        th:first-child, td:first-child {
+            width: 30%; /* Для первого столбца */
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 15%; /* Для второго столбца */
+        }
+        th:nth-child(3), td:nth-child(3) {
+            width: 10%; /* Для третьего столбца */
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 10%; /* Для третьего столбца */
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 15%; /* Для третьего столбца */
+        }
+        th:nth-child(6), td:nth-child(6) {
+            width: 15%; /* Для третьего столбца */
+        }
+        th:nth-child(7), td:nth-child(7) {
+            width: 5%; /* Для третьего столбца */
+        }
+        .export-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745; /* Зеленый цвет для кнопки */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .export-button:hover {
+            background-color: #218838; /* Темнее при наведении */
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <button onclick="location.href='stuff'">Персонал</button>
+    <button onclick="location.href='logEntry'">Журнал смен</button>
+    <button onclick="location.href='addEmployee'">Новый сотрудник</button>
+    <button onclick="location.href='/logout'">Выход</button>
+</div>
+
+<div class="content">
+    <h1>Сводная таблица учета отработанных часов сотрудниками</h1>
+    <form th:method="GET" th:action="@{/admin/journal}">
+    <div class="input-container">
+        <input type="text" placeholder="Фамилия" id="surName" name="surName">
+        <input type="text" placeholder="Должность" id="employeePost" name="employeePost">
+        <input type="text" placeholder="Табельный номер" id="stuffId" name="stuffId">
+        <input type="text" placeholder="Часов в сменах" id="jobTime" name="jobTime">
+        <button class="filter-button" type="submit">Фильтровать</button>
+    </div>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Табельный номер</th>
+            <th>Общее число смен</th>
+            <th>Отработанные часы</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each ="i : ${logEntryList}">
+            <td th:utext="${i.surname + ' ' + i.name + ' ' + i.patronymic}">ФИО сотрудника(не печатает)</td>    <!-- можно писать через гетер  "${i.employee.getStuffId()}"-->
+            <td th:utext="${i.employeePost}">Должность сотрудника(не печатает)</td>
+            <td th:utext="${i.stuffId}">Табельный номер сотрудника(не печатает)</td>
+            <td th:utext="${i.count}">общее число смен(не печатает)</td>
+            <td th:utext="${i.sum}">отработаные часы</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button class="export-button" onclick="exportTableToCSV('Учет отработанных часов.csv')">Выгрузить</button> <!-- Кнопка "Выгрузить" -->
+</div>
+
+<script>
+    function exportTableToCSV(filename) {
+        const rows = Array.from(document.querySelectorAll('Table tr'));
+        const csvContent = rows.map(row =>
+            Array.from(row.querySelectorAll('th, td'))
+                .map(cell => {
+                    const text = cell.textContent.replace(/"/g, '""');
+                    return `"${text}"`;
+                })
+                .join(';')
+        ).join('\n');
+
+        const bom = '\uFEFF';
+        const fullContent = bom + csvContent;
+
+        const blob = new Blob([fullContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.setAttribute('href', URL.createObjectURL(blob));
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+
+</body>
+</html>

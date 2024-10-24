@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигационная панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #007bff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        th:first-child, td:first-child {
+            width: 30%; /* Для первого столбца */
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 15%; /* Для второго столбца */
+        }
+        th:nth-child(3), td:nth-child(3) {
+            width: 10%; /* Для третьего столбца */
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 10%; /* Для третьего столбца */
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 15%; /* Для третьего столбца */
+        }
+        th:nth-child(6), td:nth-child(6) {
+            width: 15%; /* Для третьего столбца */
+        }
+        th:nth-child(7), td:nth-child(7) {
+            width: 5%; /* Для третьего столбца */
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <button onclick="location.href='start'">Начать смену</button>
+    <button onclick="location.href='end'">Завершить смену</button>
+    <button onclick="location.href='/logout'">Выход</button>
+</div>
+
+<div class="content">
+
+    <h1>Ваш табель</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+            <th>Табельный номер</th>
+            <th>Номер смены</th>
+            <th>Начало смены</th>
+            <th>Конец смены</th>
+            <th>Часов в сменах</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each ="i : ${logEntryList}">
+            <td th:utext="${i.employee.surname+ ' ' +i.employee.name+ ' ' +i.employee.patronymic}">ФИО сотрудника(не печатает)</td>    <!-- можно писать через гетер  "${i.employee.getStuffId()}"-->
+            <td th:utext="${i.employee.employeePost}">Должность сотрудника(не печатает)</td>
+            <td th:utext="${i.employee.stuffId}">Табельный номер сотрудника(не печатает)</td>
+            <td th:utext="${i.id}">номер смены(не печатает)</td>
+            <td th:utext="${i.startTime}">начало смены(не печатает)</td>
+            <td th:utext="${i.endTime}">конец смены(не печатает)</td>
+            <td th:utext="${i.jobTime}">Время смены(не печатает)</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

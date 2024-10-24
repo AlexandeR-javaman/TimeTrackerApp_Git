@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигационная панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #007bff;
+            width: 100%;
+        }
+        .navbar table {
+            width: 100%;
+            height: 69px;
+            table-layout: fixed;
+        }
+        .navbar td {
+            text-align: center;
+            height: 100%;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .start-shift-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .start-shift-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <table>
+        <tr>
+            <td><button onclick="location.href='journal'">На страницу с табелем</button></td>
+            <td></td> <!-- Пустая ячейка -->
+            <td><button onclick="location.href='/logout'">Выход</button></td>
+        </tr>
+    </table>
+</div>
+
+<div class="content">
+    <h1>Вы уверены, что готовы приступить к выполнению должностных обязанностей?</h1>
+  <!--  <p>нажмите кнопку уверен</p>-->
+
+<!--    <button class="start-shift-button" onclick="location.href='startShift'">Начать смену</button>-->
+    <form  th:method="POST" th:action="@{/user/start}" th:object="${errorMessage}">
+<!--        <button type="submit">Начать смену</button>-->
+        <div style="color:red"  th:if="${errorMessage}"  th:text="${errorMessage}">Текст ошибки</div>
+        <button class="start-shift-button">Начать смену</button>
+    </form>
+</div>
+</body>
+</html>

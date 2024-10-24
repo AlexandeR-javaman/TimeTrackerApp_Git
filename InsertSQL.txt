@@ -1,0 +1,14 @@
+TRUNCATE TABLE employee RESTART IDENTITY CASCADE;
+INSERT INTO employee (surname, name, patronymic, stuff_id, employee_post, role, login, password) VALUES ('Александров', 'Александр', 'Александрович', 1, 'Администратор', 'ROLE_ADMIN', 'admin', '$2a$10$jHwfhz44yz1jwcfKb3yp1OpDfK5Gp5bTdWz9Xkn0E2bXTWQ4aA1Nq');
+INSERT INTO employee (surname, name, patronymic, stuff_id, employee_post, role, login, password) VALUES ('Иванов', 'Иван', 'Иванович', 2, 'Инженер', 'ROLE_USER', 'user1', '$2a$10$cG9R0RidmmKUyAYGZfgDnuboCtp26nq94AhDjjX6s/PKAtEFQXp72');
+INSERT INTO employee (surname, name, patronymic, stuff_id, employee_post, role, login, password) VALUES ('Петров', 'Петр', 'Петрович', 3, 'Мастер', 'ROLE_USER', 'user2', '$2a$10$ohpRHUoYKVUg2gN7U/0yculnManUvWSZOuPf4ENIoKpvTIAMr8uSe');
+INSERT INTO employee (surname, name, patronymic, stuff_id, employee_post, role, login, password) VALUES ('Александров', 'Иван', 'Петрович', 4, 'Мастер', 'ROLE_USER', 'user3', '$2a$10$3wUU0RSwHT3/dx5ZCnVqzOSs3NvvVYJl9mvPHYW4Ao1LOumLsIhBq');
+
+INSERT INTO log_entry (employee_Id, start_time, end_time, message, job_Time) VALUES (2, '2024-10-18 09:10:34.437382', '2024-10-18 16:10:35.437382', 'Все хорошо', 7);
+INSERT INTO log_entry (employee_Id, start_time, end_time, message, job_Time) VALUES (2, '2024-10-19 10:10:34.437382', '2024-10-19 17:10:35.437382', 'Все еще лучше', 6);
+INSERT INTO log_entry (employee_Id, start_time, end_time, message, job_Time) VALUES (3, '2024-10-20 08:10:34.437382', '2024-10-20 17:10:35.437382', 'Все нормально', 9);
+
+TRUNCATE TABLE log_entry;
+
+DROP TABLE log_entry;
+DROP TABLE employee;

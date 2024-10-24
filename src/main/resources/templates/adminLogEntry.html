@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигационная панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #007bff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        th:first-child, td:first-child {
+            width: 5%; /* Для первого столбца */
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 5%; /* Для второго столбца */
+        }
+        th:nth-child(3), td:nth-child(3) {
+            width: 25%; /* Для третьего столбца */
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 5%; /* Для третьего столбца */
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 5%; /* Для третьего столбца */
+        }
+        th:nth-child(6), td:nth-child(6) {
+            width: 5%; /* Для третьего столбца */
+        }
+        th:nth-child(7), td:nth-child(7) {
+            width: 50%; /* Для третьего столбца */
+        }
+        .export-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #28a745; /* Зеленый цвет для кнопки */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .export-button:hover {
+            background-color: #218838; /* Темнее при наведении */
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <button onclick="location.href='stuff'">Персонал</button>
+    <button onclick="location.href='journal'">Журнал работы сотрудников</button>
+    <button onclick="location.href='addEmployee'">Новый сотрудник</button>
+    <button onclick="location.href='/logout'">Выход</button>
+</div>
+
+<div class="content">
+    <!--<h1>Добро пожаловать!</h1>
+    <h1>Вы на странице с базой смен</h1>
+    <p>Выберите опцию на панели навигации.</p>-->
+    <h1>Таблица смен из базы данных</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Номер смены</th>
+            <th>Таб. № сотруд.</th>
+            <th>ФИО</th>
+            <th>Начало смены</th>
+            <th>Конец смены</th>
+            <th>Часов отработано</th>
+            <th>Сообщение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each ="i : ${logEntryList}">
+            <td th:utext="${i.id}">Номер смены(не печатает)</td>
+            <td th:utext="${i.employee.stuffId}">Табельный номер сотрудника(не печатает)</td>    <!-- можно писать через гетер  "${i.employee.getStuffId()}"-->
+            <td th:utext="${i.employee.surname+ ' ' +i.employee.name+ ' ' +i.employee.patronymic}">ФИО сотрудника(не печатает)</td>    <!-- можно писать через гетер  "${i.employee.getStuffId()}"-->
+            <td th:utext="${i.startTime}">Начало смены(не печатает)</td>
+            <td th:utext="${i.endTime}">Конец смены(не печатает)</td>
+            <td th:utext="${i.jobTime}">часов отработано(не печатает)</td>
+            <td th:utext="${i.message}">Сообщение(не печатает)</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="export-button" onclick="exportTableToCSV('Таблица отработанных смен.csv')">Выгрузить</button> <!-- Кнопка "Выгрузить" -->
+</div>
+
+<script>
+    function exportTableToCSV(filename) {
+        const rows = Array.from(document.querySelectorAll('Table tr'));
+        const csvContent = rows.map(row =>
+            Array.from(row.querySelectorAll('th, td'))
+                .map(cell => {
+                    const text = cell.textContent.replace(/"/g, '""');
+                    return `"${text}"`;
+                })
+                .join(';')
+        ).join('\n');
+
+
+        const bom = '\uFEFF';
+        const fullContent = bom + csvContent;
+
+        const blob = new Blob([fullContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.setAttribute('href', URL.createObjectURL(blob));
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+
+</body>
+</html>

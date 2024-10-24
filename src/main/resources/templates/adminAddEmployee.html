@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигационная панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .navbar {
+            background-color: #007bff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+        .navbar button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .navbar button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .registration-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .registration-form input {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .registration-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .registration-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <button onclick="location.href='stuff'">Персонал</button>
+    <button onclick="location.href='logEntry'">Журнал смен</button>
+    <button onclick="location.href='journal'">Журнал работы сотрудников</button>
+    <button onclick="location.href='/logout'">Выход</button>
+</div>
+
+<div class="content">
+    <div class="registration-form">
+        <h2>Регистрация нового сотрудника</h2>
+        <form th:method="POST" th:action="@{/admin/addEmployee}" th:object="${employee}" onsubmit="return validateForm()">
+            <input type="text" placeholder="Фамилия" required th:field="*{surname}" id="surname"/>
+            <input type="text" placeholder="Имя" required th:field="*{name}" id="name"/>
+            <input type="text" placeholder="Отчество" required th:field="*{patronymic}" id="patronymic"/>
+            <input type="text" placeholder="Должность" required th:field="*{employeePost}" id="employeePost"/>
+            <input type="text" placeholder="Табельный номер" required th:field="*{stuffId}" id="stuffId"/>
+            <input type="text" placeholder="Логин" required th:field="*{login}" id="login"/>
+            <input type="password" placeholder="Пароль" required th:field="*{password}" id="password"/>
+            <input type="password" placeholder="Подтверждение пароля" required name="confirmPassword" id="confirmPassword" oninput="checkPasswordMatch()"/>
+            <span id="passwordMessage"></span>
+            <button type="submit">Зарегистрировать</button>
+        </form>
+
+        <script>
+            function checkPasswordMatch() {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const message = document.getElementById('passwordMessage');
+
+                if (password !== confirmPassword) {
+                    message.textContent = 'Пароли не совпадают';
+                    message.style.color = 'red';
+                } else {
+                    message.textContent = 'Пароли совпадают';
+                    message.style.color = 'green';
+                }
+            }
+
+            function validateForm() {
+                const fields = [
+                    'surname',
+                    'name',
+                    'patronymic',
+                    'employeePost',
+                    'stuffId',
+                    'login',
+                    'password',
+                    'confirmPassword'
+                ];
+                const message = document.getElementById('passwordMessage');
+
+                for (const field of fields) {
+                    const value = document.getElementById(field).value;
+                    if (!value) {
+                        message.textContent = 'Все поля должны быть заполнены';
+                        message.style.color = 'red';
+                        return false; // Отменяем отправку формы
+                    }
+                }
+
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (password !== confirmPassword) {
+                    message.textContent = 'Пароли не совпадают';
+                    message.style.color = 'red';
+                    return false; // Отменяем отправку формы
+                }
+                return true; // Разрешаем отправку формы
+            }
+        </script>
+    </div>
+</div>
+
+
+
+</body>
+</html>

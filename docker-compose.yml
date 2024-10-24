@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  postgresDb:
+    container_name: PostgreSQL
+    image: postgres:17.0-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=TimeTrackerDb
+
+  app:
+    build:
+      context: .
+    container_name: TimeTracker
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresDb
+    environment:
+      - DB_URL=jdbc:postgresql://postgresDb:5432/TimeTrackerDb
+      - USER_DB=postgres
+      - PASSWORD_DB=postgres
+
